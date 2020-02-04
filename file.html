@@ -1,0 +1,506 @@
+<h1>感谢@ksky521的无私奉献！！！</h1>
+
+<p>&lt;h1 align=&quot;center&quot;&gt;nodeppt 2.0&lt;/h1&gt;</p>
+
+<blockquote><p>累死累活干不过做 PPT 的！&lt;br/&gt; &gt; <strong>查看效果：https://nodeppt.js.org</strong></p></blockquote>
+
+<p><a href="https://www.npmjs.com/package/nodeppt"><img alt="Markpress npm badge" src="https://nodei.co/npm/nodeppt.png"/></a></p>
+
+<p><strong>nodeppt 2.0</strong> 基于<a href="https://github.com/webslides/WebSlides">webslides</a>、webpack、markdown-it、posthtml 重构，<a href="https://nodeppt.js.org">新效果</a></p>
+
+<p>&lt;h2 align=&quot;center&quot;&gt;Install&lt;/h2&gt;</p>
+
+<p><code>bash
+npm install -g nodeppt
+</code></p>
+
+<h2>TODO</h2>
+
+<ul><li>bug fix</li><li>增加多页编辑公共资源，说人话就是 splitChunks</li></ul>
+
+<p>&lt;h2 align=&quot;center&quot;&gt;Usage&lt;/h2&gt;</p>
+
+<p>简化了，就三个命令：</p>
+
+<ul><li>new：使用线上模板创建一个新的 md 文件</li><li>serve：启动一个 md 文件的 webpack dev server</li><li>build：编译产出一个 md 文件</li></ul>
+
+<p><code></code>`bash</p>
+
+<h1>create a new slide with an official template</h1>
+
+<p>$ nodeppt new slide.md</p>
+
+<h1>create a new slide straight from a github template</h1>
+
+<p>$ nodeppt new slide.md -t username/repo</p>
+
+<h1>start local sever show slide</h1>
+
+<p>$ nodeppt serve slide.md</p>
+
+<h1>to build a slide</h1>
+
+<p>$ nodeppt build slide.md
+<code></code>`</p>
+
+<h3>帮助</h3>
+
+<p><code></code>`bash</p>
+
+<h1>help</h1>
+
+<p>nodeppt -h</p>
+
+<h1>获取帮助</h1>
+
+<p>nodeppt serve -h
+<code></code>`</p>
+
+<p>&lt;h2 align=&quot;center&quot;&gt;演讲者模式&lt;/h2&gt;</p>
+
+<p>nodeppt 有演讲者模式，在页面 url 后面增加<code>?mode=speaker</code> 既可以打开演讲者模式，双屏同步</p>
+
+<p>&lt;h2 align=&quot;center&quot;&gt;Keyboard Shortcuts&lt;/h2&gt;</p>
+
+<ul><li>Page: ↑/↓/←/→ Space Home End</li><li>Fullscreen: F</li><li>Overview: -/+</li><li>Speaker Note: N</li><li>Grid Background: Enter</li></ul>
+
+<p>&lt;h2 align=&quot;center&quot;&gt;公共资源：public 文件夹&lt;/h2&gt;</p>
+
+<p>如果项目文件夹下，存在<code>public</code>文件夹，可以直接通过 url 访问，参考<code>webpack dev server</code>的 <code>contentBase</code> 选项。</p>
+
+<p>在<code>build</code>的时候，public 文件夹中的文件会完全 copy 到<code>dist</code>文件夹中</p>
+
+<p>&lt;h2 align=&quot;center&quot;&gt;编写&lt;/h2&gt;</p>
+
+<p>最佳体验是 chrome 浏览器，本来就是给做演示用的，所以就别考虑非 Chrome 浏览器兼容问题了！</p>
+
+<p>这里说下怎么编写。</p>
+
+<h3>基本语法</h3>
+
+<p>整个 markdown 文件分为两部分，第一部分是写在最前面的<strong>配置</strong>，然后是使用<code>&lt;slide&gt;</code>隔开的每页幻灯片内容。</p>
+
+<h3>配置</h3>
+
+<p>nodeppt 的配置是直接写在 md 文件顶部的，采用 yaml 语法，例如下面配置：</p>
+
+<p><code>yaml
+title: nodeppt markdown 演示
+speaker: 三水清
+url: https://github.com/ksky521/nodeppt
+js:
+    - https://www.echartsjs.com/asset/theme/shine.js
+prismTheme: solarizedlight
+plugins:
+    - echarts
+    - mermaid
+    - katex
+</code></p>
+
+<ul><li>title: 演讲主题</li><li>speaker：演讲者</li><li>url：地址</li><li>js：js 文件数组，放到 body 之前</li><li>css：css 文件数组，放到头部</li><li>prismTheme：prism 配色，取值范围 <code>[&#39;dark&#39;, &#39;coy&#39;, &#39;funky&#39;, &#39;okaidia&#39;, &#39;tomorrow&#39;, &#39;solarizedlight&#39;, &#39;twilight&#39;]</code></li><li>plugins：目前支持 <a href="https://echarts.baidu.com/">echarts</a>，<a href="https://mermaidjs.github.io/">mermaid</a>和 <a href="https://katex.org">katex</a> 三个插件</li></ul>
+
+<h4>插件</h4>
+
+<p>目前 nodeppt 支持 <a href="https://echarts.baidu.com/">图表 echarts</a>，<a href="https://mermaidjs.github.io/">流程图 mermaid</a>，<a href="https://katex.org">数学符号 KaTeX</a> 三个插件。</p>
+
+<h4>echarts</h4>
+
+<p>echarts 主题配色可以直接在<code>yaml</code>配置的 js 中引入。echarts 采用<code>fence</code>语法，如下：</p>
+
+<p><code>echarts
+{
+    xAxis: {
+        type: &#39;category&#39;,
+        data: [&#39;Mon&#39;, &#39;Tue&#39;, &#39;Wed&#39;, &#39;Thu&#39;, &#39;Fri&#39;, &#39;Sat&#39;, &#39;Sun&#39;]
+    },
+    yAxis: {
+        type: &#39;value&#39;
+    },
+    series: [{
+        data: [820, 932, 901, 934, 1290, 1330, 1320],
+        type: &#39;line&#39;
+    }]
+}
+</code>
+详见<a href="./site/echarts.md">site/echarts.md</a></p>
+
+<h4>mermaid</h4>
+
+<p>mermaid 主题配色可以直接在<code>yaml</code>配置的 js 中引入。mermaid 采用<code>fence</code>语法，如下：</p>
+
+<p><code></code>`mermaid
+sequenceDiagram
+    Alice -&gt;&gt; Bob: Hello Bob, how are you?
+    Bob--&gt;&gt;John: How about you John?
+    Bob--x Alice: I am good thanks!
+    Bob-x John: I am good thanks!
+    Note right of John: Bob thinks a long&lt;br/&gt;long time, so long&lt;br/&gt;that the text does&lt;br/&gt;not fit on a row.</p>
+
+<pre><code>Bob--&gt;Alice: Checking with John...
+Alice-&gt;John: Yes... John, how are you?</code></pre>
+
+<p><code></code>`</p>
+
+<p>详见<a href="./site/mermaid.md">site/mermaid.md</a></p>
+
+<h4>ketex</h4>
+
+<p>参考：<a href="https://www.npmjs.com/package/markdown-it-katex">markdown-it-katex</a>语法</p>
+
+<h3><code>&lt;slide&gt;</code> 语法</h3>
+
+<p>nodeppt 会根据<code>&lt;slide&gt;</code>对整个 markdown 文件进行拆分，拆成单页的幻灯片内容。<code>&lt;slide&gt;</code> 标签支持下面标签：</p>
+
+<ul><li>class/style 等：正常的 class 类，可以通过这个控制居中（aligncenter），内容位置，背景色等</li><li>image：背景图片，基本语法 <code>image=&quot;img_url&quot;</code></li><li>video：背景视频，基本语法 <code>video=&quot;video_src1,video_src2&quot;</code></li><li>:class：wrap 的 class，下面详解</li></ul>
+
+<p>每个 slide 会解析成下面的 html 结构：</p>
+
+<p><code>html
+&lt;section class=&quot;slide&quot; attrs...&gt;&lt;div class=&quot;wrap&quot; wrap=&quot;true&quot;&gt;// 具体 markdown 渲染的内容&lt;/div&gt;&lt;/section&gt;
+</code></p>
+
+<p>其中<code>&lt;slide&gt;</code> 的<code>class</code>等会被解析到 <code>&lt;section&gt;</code>标签上面，而<code>:class</code>则被解析到<code>div.wrap</code>上面，例如：</p>
+
+<p><code>html
+&lt;slide :class=&quot;size-50&quot; class=&quot;bg-primary&quot;&gt;&lt;/slide&gt;
+</code></p>
+
+<p>output 为：</p>
+
+<p><code>html
+&lt;section class=&quot;slide bg-primary&quot;&gt;&lt;div class=&quot;wrap size-50&quot; wrap=&quot;true&quot;&gt;// 具体 markdown 渲染的内容&lt;/div&gt;&lt;/section&gt;
+</code></p>
+
+<h4>背景：图片</h4>
+
+<p><code>&lt;slide&gt;</code>的<code>image</code> 会被解析成背景大图，常见的支持方式有：</p>
+
+<p><code></code>`md
+&lt;slide image=&quot;https://source.unsplash.com/UJbHNoVPZW0/&quot;&gt;</p>
+
+<h1>这是一个普通的背景图</h1>
+
+<p>&lt;slide image=&quot;https://source.unsplash.com/UJbHNoVPZW0/ .dark&quot;&gt;</p>
+
+<h1>这张背景图会在图片上面蒙一层偏黑色的透明层</h1>
+
+<p>&lt;slide image=&quot;https://source.unsplash.com/UJbHNoVPZW0/ .light&quot;&gt;</p>
+
+<h1>这张背景图会在图片上面蒙一层偏白色的透明层</h1>
+
+<p>&lt;slide class=&quot;bg-black aligncenter&quot; image=&quot;https://source.unsplash.com/n9WPPWiPPJw/ .anim&quot;&gt;</p>
+
+<h1>这张背景图会缓慢动</h1>
+
+<p><code></code>`</p>
+
+<p>详见<a href="./site/background.md">site/background.md</a>和<a href="https://js8.in/nodeppt/background.html">在线演示</a></p>
+
+<h3>样式</h3>
+
+<p>样式太多，具体详见<a href="./site/classes.md">site/classes.md</a>和<a href="https://js8.in/nodeppt/classes.html">在线演示</a></p>
+
+<h3>布局</h3>
+
+<p>nodeppt 这次使用<code>webslides</code>的布局，支持丰富的布局，实在太多了，直接看文档<a href="./site/layout.md">site/layout.md</a>和<a href="https://js8.in/nodeppt/layout.html">在线演示</a></p>
+
+<h3>attribute</h3>
+
+<p>参考<a href="https://www.npmjs.com/package/markdown-it-attrs">markdown-it-attrs</a>，支持了<code>attribute</code>，修改增加多 class 支持等功能。</p>
+
+<p>其中：<code>..class</code>会往上一级节点添加 class，支持<code>{.class1.class2}</code>这种多 class 的语法。用法举例：</p>
+
+<p><code></code>`markdown</p>
+
+<h1>header {.style-me.class2}</h1>
+
+<p>paragraph {data-toggle=modal}
+<code></code>`</p>
+
+<p>Output:</p>
+
+<p><code>html
+&lt;h1 class=&quot;style-me class2&quot;&gt;header&lt;/h1&gt;
+&lt;p data-toggle=&quot;modal&quot;&gt;paragraph&lt;/p&gt;
+</code></p>
+
+<p><code>markdown
+Use the css-module green on this paragraph. {.text-intro}
+</code></p>
+
+<p>Output:</p>
+
+<p><code>html
+&lt;p class=&quot;text-intro&quot;&gt;Use the css-module green on this paragraph.&lt;/p&gt;
+</code></p>
+
+<p><code>markdown
+-   list item **bold** {.red}
+</code></p>
+
+<p>Output:</p>
+
+<p><code>html
+&lt;ul&gt;
+    &lt;li class=&quot;red&quot;&gt;list item &lt;strong&gt;bold&lt;/strong&gt;&lt;/li&gt;
+&lt;/ul&gt;
+</code></p>
+
+<p><code>markdown
+-   list item **bold**
+    {.red}
+</code></p>
+
+<p>Output:</p>
+
+<p><code>html
+&lt;ul class=&quot;red&quot;&gt;
+    &lt;li&gt;list item &lt;strong&gt;bold&lt;/strong&gt;&lt;/li&gt;
+&lt;/ul&gt;
+</code></p>
+
+<h3>image 增强</h3>
+
+<p>对于 image ，支持外面包裹一层的写法，具体语法 <code>!![](图片地址 属性)</code>，例如：</p>
+
+<p><code>markdown
+!![](https://webslides.tv/static/images/iphone.png .size-50.alignleft)
+</code></p>
+
+<p>Output：</p>
+
+<p><code>html
+&lt;img src=&quot;https://webslides.tv/static/images/iphone.png&quot; class=&quot;size-50 alignleft&quot; /&gt;
+</code></p>
+
+<p><code>markdown
+!![figure](https://webslides.tv/static/images/setup.png .aligncenter)
+</code></p>
+
+<p>Output:</p>
+
+<p><code>html
+&lt;figure&gt;&lt;img src=&quot;https://webslides.tv/static/images/setup.png&quot; class=&quot;aligncenter&quot; /&gt;&lt;/figure&gt;
+</code></p>
+
+<h3>button</h3>
+
+<p>nodeppt 的 button 是类似<code>link</code>语法的，支持蓝色、圆角、空心和 icon 版本的 button：</p>
+
+<p><code></code>`markdown
+<a href="">普通按钮</a>{.button} <a href="">圆角普通按钮</a>{.button.radius}</p>
+
+<p><a href="">空心</a>{.button.ghost} <a href="">:fa-github: 前面带 icon</a>{.button}
+<code></code>`</p>
+
+<h3>Icon：FontAwesome</h3>
+
+<p>nodeppt 的 icon 支持 <a href="https://fontawesome.com/">FontAwesome</a>
+语法：</p>
+
+<ul><li><code>:fa-xxx:</code> → <code>&lt;i class=&quot;fa fa-xxx&quot;&gt;&lt;/i&gt;</code></li><li><code>:~fa-xxx:~</code> → <code>&lt;span&gt;&lt;i class=&quot;fa fa-xxx&quot;&gt;&lt;/i&gt;&lt;/span&gt;</code></li><li><code>::fa-xxx::</code> → 块级<code>&lt;i class=&quot;fa fa-xxx&quot;&gt;&lt;/i&gt;</code>，即不会被<code>p</code>包裹</li></ul>
+
+<h3>span</h3>
+
+<p>代码修改自<a href="https://github.com/pnewell/markdown-it-span/">markdown-it-span</a>，支持 <code>attr</code>语法，基本用法：</p>
+
+<p><code>md
+:span:
+:span: {.text-span}
+</code></p>
+
+<h3>动效</h3>
+
+<p>nodeppt 一如既往的支持动效，2.0 版本支持动效主要是页面内的动效。</p>
+
+<p>支持动效包括：</p>
+
+<ul><li>fadeIn</li><li>zoomIn</li><li>rollIn</li><li>moveIn</li><li>fadeInUp</li><li>slow</li></ul>
+
+<p>在需要支持的动效父节点添加<code>.build</code>或者在具体的某个元素上添加<code>.tobuild+动效 class</code>即可。</p>
+
+<p>按照惯例，nodeppt 还支持<code>animate.css</code>的动效哦~</p>
+
+<p>详细查看文件：<a href="./site/animation.md">site/animation.md</a>和<a href="https://js8.in/nodeppt/animation.html">在线演示</a></p>
+
+<h3>使用强大的<code>:::</code>完成复杂布局</h3>
+
+<p><code>:::</code>语法是扩展了 <a href="https://www.npmjs.com/package/markdown-it-container">markdown-it-container</a> 语法，默认是任意 tag，例如</p>
+
+<p><code></code>`markdown
+:::div {.content-left}</p>
+
+<h2>title</h2>
+
+<p>:::
+<code></code>`</p>
+
+<p>Output：</p>
+
+<p><code>html
+&lt;div class=&quot;content-left&quot;&gt;&lt;h2&gt;title&lt;/h2&gt;&lt;/div&gt;
+</code></p>
+
+<p>还支持，<code>tag</code> 嵌套，除此之外，支持的组件包括：</p>
+
+<ul><li>card：卡片，一边是图片，一边是内容</li><li>column：column 多栏布局</li><li>shadowbox：带阴影的盒子</li><li>steps：步骤组件</li><li>cta：</li><li>gallery：图片</li><li>flexblock：flex block 布局，支持多个子类型</li><li>note: 演讲注释</li></ul>
+
+<p>基本语法是：</p>
+
+<p><code></code>`markdown
+:::TYPE {.attrs}</p>
+
+<h2>第一部分</h2>
+
+<p>使用 hr 标签隔开</p>
+
+<hr/>
+
+<h2>第二部分</h2>
+
+<p>这里的内容也是哦</p>
+
+<p>:::
+<code></code>`</p>
+
+<p>详细可以看 <a href="./site/component.md">component</a> 部分的 markdown 文件和<a href="https://js8.in/nodeppt/component.html">在线演示</a></p>
+
+<p>&lt;h2 align=&quot;center&quot;&gt;打印？导出 pdf？&lt;/h2&gt;</p>
+
+<p>chrome 浏览器，直接在第一页 <code>command+P/ctrl+P</code> 即可</p>
+
+<p>&lt;h2 align=&quot;center&quot;&gt;高级玩法&lt;/h2&gt;</p>
+
+<p>如果上面</p>
+
+<h3><code>nodeppt.config.js</code></h3>
+
+<p>在 nodeppt 执行路径下创建<code>nodeppt.config.js</code>文件，可以配置跟<code>webpack</code>相关的选项，另外可以支持自研 nodeppt 插件。</p>
+
+<p>默认内置的<code>config.js</code>内容如下：</p>
+
+<p><code></code>`js
+/**
+ <em> @file 默认配置
+ </em>/
+module.exports = () =&gt; ({
+    // project deployment base
+    baseUrl: &#39;/&#39;,</p>
+
+<pre><code>// where to output built files
+outputDir: &#39;dist&#39;,
+
+// where to put static assets (js/css/img/font/...)
+assetsDir: &#39;&#39;,
+
+// filename for index.html (relative to outputDir)
+indexPath: &#39;index.html&#39;,
+// 插件，包括 markdown 和 posthtml
+plugins: [],
+// chainWebpack: [],
+
+// whether filename will contain hash part
+filenameHashing: true,
+
+// boolean, use full build?
+runtimeCompiler: false,
+
+// deps to transpile
+transpileDependencies: [
+    /* string or regex */
+],
+
+// sourceMap for production build?
+productionSourceMap: true,
+
+// use thread-loader for babel &amp; TS in production build
+// enabled by default if the machine has more than 1 cores
+parallel: () =&gt; {
+    try {
+        return require(&#39;os&#39;).cpus().length &gt; 1;
+    } catch (e) {
+        return false;
+    }
+},
+
+// multi-page config
+pages: undefined,
+
+// &lt;script type=&quot;module&quot; crossorigin=&quot;use-credentials&quot;&gt;
+// #1656, #1867, #2025
+crossorigin: undefined,
+
+// subresource integrity
+integrity: false,
+
+css: {
+    extract: true
+    // modules: false,
+    // localIdentName: &#39;[name]_[local]_[hash:base64:5]&#39;,
+    // sourceMap: false,
+    // loaderOptions: {}
+},
+
+devServer: {
+    /*
+  host: &#39;0.0.0.0&#39;,
+  port: 8080,
+  https: false,
+  proxy: null, // string | Object
+  before: app =&gt; {}
+*/
+}</code></pre>
+
+<p>});
+<code></code>`</p>
+
+<h3>parser plugin</h3>
+
+<p>解析插件分两类： <code>markdown-it</code> 和 <code>posthtml</code>，</p>
+
+<ul><li>markdown-it：是解析 markdown 文件的，如果是增强 markdown 语法，可以用这类插件</li><li>posthtml：是处理 html 标签的，如果是修改输出的 html 内容，可以用这类插件</li></ul>
+
+<p>定义一个 plugin ：</p>
+
+<p><code>js
+module.exports = {
+    // 这里的 id 必须以 markdown/posthtml开头
+    // 分别对应 markdown-it和 posthtml 插件语法
+    id: &#39;markdown-xxx&#39;,
+    // 这里的 apply 是插件实际的内容，详细查看 markdown-it和 posthtml 插件开发
+    apply: () =&gt; {}
+};
+</code></p>
+
+<ul><li><a href="https://github.com/markdown-it/markdown-it/tree/master/docs">markdown-it docs</a></li><li><a href="https://github.com/posthtml/posthtml/tree/master/docs">posthtml docs</a></li></ul>
+
+<h3>webslides plugin</h3>
+
+<p>WebSlides 插件需要写到一个 js 文件中，然后作为数组放到<code>window.WSPlugins_</code>中，然后通过在 md 页面的配置（yaml）添加 js 的方法引入。</p>
+
+<p><code>md
+js: - webslide_plugins.js
+</code></p>
+
+<p><code>js
+// webslide_plugins.js内容
+window.WSPlugins_ = [
+    {
+        id: &#39;webslide_plugin_name&#39;,
+        // 下面是对应的插件类
+        apply: class Plugin {}
+    }
+];
+</code></p>
+
+<p>参考<a href="https://github.com/webslides/WebSlides/wiki/Plugin-development">WebSlides 文档</a></p>
+
+<h3>Template：自制模板</h3>
+
+<p>参考<a href="https://github.com/ksky521/nodeppt-template-default">nodeppt-template-default</a>。</p>
+
+<p>然后使用<code>nodeppt new username/repo xxx.md</code>使用</p>
+
+<p>&lt;h2 align=&quot;center&quot;&gt;Thanks&lt;/h2&gt;</p>
+
+<ul><li><a href="https://github.com/webslides/WebSlides">WebSlides</a></li><li><a href="https://github.com/markdown-it/markdown-it">markdown-it</a></li><li><a href="https://github.com/posthtml/posthtml">posthtml</a></li><li><a href="https://github.com/webpack/webpack">webpack</a></li><li><a href="https://github.com/vuejs/vue-cli">vue-cli</a></li></ul>
